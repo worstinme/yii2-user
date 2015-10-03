@@ -1,7 +1,7 @@
 <?php
 /**
- * @link https://github.com/himiklab/yii2-sitemap-module
- * @copyright Copyright (c) 2014 HimikLab
+ * @link https://github.com/worstinme/yii2-user
+ * @copyright Copyright (c) 2014 Evgeny Zakirov
  * @license http://opensource.org/licenses/MIT MIT
  */
 
@@ -11,8 +11,8 @@ use Yii;
 use yii\web\Controller;
 
 /**
- * @author HimikLab
- * @package himiklab\sitemap
+ * @author Evgeny Zakirov
+ * @package worstinme\user
  */
 class DefaultController extends Controller
 {
