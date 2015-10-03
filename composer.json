@@ -1,0 +1,26 @@
+{
+	"name": "worstinme/yii2-user",
+	"description": "Yii2 module for user auth",
+	"keywords": ["yii2", "user", "eauth", "module"],
+	"type": "yii2-extension",
+	"license": "MIT",
+	"support": {
+		"source": "https://github.com/worstinme/yii2-user",
+        "issues": "https://github.com/worstinme/yii2-user/issues"
+	},
+	"authors": [
+        {
+            "name": "Evgeny Zakirov",
+            "homepage" : "http://flyleaf.su"
+        }
+	],
+	"require": {
+		"yiisoft/yii2": "*"
+		"worstinme/yii2-uikit": "*"
+	},
+	"autoload": {
+		"psr-4": {
+            "worstinme\\user\\": ""
+        }
+	}
+}
