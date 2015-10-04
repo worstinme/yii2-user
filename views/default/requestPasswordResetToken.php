@@ -1,6 +1,6 @@
 <?php
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+use worstinme\uikit\ActiveForm;
 use worstinme\user\Module;
 
 /* @var $this yii\web\View */
@@ -11,18 +11,19 @@ $this->title = Module::t('app', 'TITLE_RESET_PASSWORD');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-default-request-password-reset">
+    
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p><?= Module::t('app', 'PLEASE_FILL_FOR_RESET_REQUEST') ?></p>
 
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'request-password-reset-form']); ?>
-            <?= $form->field($model, 'email') ?>
-            <div class="form-group">
-                <?= Html::submitButton(Module::t('app', 'BUTTON_SEND'), ['class' => 'btn btn-primary']) ?>
-            </div>
-            <?php ActiveForm::end(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'request-password-reset-form','field_width'=>'full','field_size'=>'large']); ?>
+    
+        <?= $form->field($model, 'email')->textInput(['placeholder' => Module::t('app','USER_EMAIL')])->label(false) ?>
+                
+        <div class="uk-form-row">
+            <?= Html::submitButton(Module::t('app', 'BUTTON_SEND'), ['class' => 'uk-button uk-button-primary']) ?>
         </div>
-    </div>
+
+    <?php ActiveForm::end(); ?>
+    
 </div>

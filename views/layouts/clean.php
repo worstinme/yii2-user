@@ -19,8 +19,14 @@ $this->beginPage() ?>
 </head>
 <body class="uk-height-1-1">
 <?php $this->beginBody() ?>
+<div class="uk-vertical-align uk-text-center uk-height-1-1">
+    <div class="uk-vertical-align-middle" style="min-width:300px">
+        <div class="uk-panel uk-panel-box uk-margin-top">
 			<?= Alert::widget() ?>
 			<?php echo $content; ?>
+		</div>
+    </div>  
+</div>
 <?php $this->endBody() ?>
 </body>
 </html>

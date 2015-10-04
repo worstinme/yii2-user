@@ -10,6 +10,7 @@ use Yii;
 
 class ProfileController extends Controller
 {
+    
     public function behaviors()
     {
         return [

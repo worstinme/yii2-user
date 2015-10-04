@@ -17,6 +17,7 @@ use Yii;
 
 class DefaultController extends Controller
 {
+    
 
     public function behaviors()
     {
@@ -60,7 +61,9 @@ class DefaultController extends Controller
     }
 
     public function actionLogin()
-    {
+    {   
+        $this->layout = 'clean';
+
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -117,6 +120,8 @@ class DefaultController extends Controller
 
     public function actionRequestPasswordReset()
     {
+        $this->layout = 'clean';
+
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
@@ -135,6 +140,8 @@ class DefaultController extends Controller
 
     public function actionResetPassword($token)
     {
+        $this->layout = 'clean';
+        
         try {
             $model = new ResetPasswordForm($token);
         } catch (InvalidParamException $e) {
