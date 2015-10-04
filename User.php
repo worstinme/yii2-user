@@ -1,29 +1,24 @@
-<?php
-/**
- * @link https://github.com/worstinme/yii2-user
- * @copyright Copyright (c) 2014 Evgeny Zakirov
- * @license http://opensource.org/licenses/MIT MIT
- */
-
+<?php 
 
 namespace worstinme\user;
 
 use Yii;
-use yii\base\InvalidConfigException;
-use yii\base\Module;
 
-/**
- * @author Evgeny Zakirov
- * @package worstinme\user
- */
-class User extends Module
+class User extends \yii\web\User
 {
-	public $controllerNamespace = 'worstinme\user\controllers';
 
-	public function init()
+    const STATUS_BLOCKED = 0;
+    const STATUS_ACTIVE = 1;
+    const STATUS_WAIT = 2;
+
+    const ROLE_USER = 1;
+    const ROLE_MODER = 5;
+    const ROLE_ADMIN = 10;
+
+
+    public function isAdmin()
     {
-        parent::init();
-
-        // custom initialization code goes here
+        return $this->identity->role == self::ROLE_ADMIN ? true : false; 
     }
+
 }
