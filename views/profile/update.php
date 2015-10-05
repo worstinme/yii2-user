@@ -2,13 +2,12 @@
 
 use worstinme\uikit\ActiveForm;
 use yii\helpers\Html;
-use worstinme\user\Module;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\user\models\User */
 
-$this->title = Module::t('app', 'TITLE_UPDATE');
-$this->params['breadcrumbs'][] = ['label' => Module::t('app', 'TITLE_PROFILE'), 'url' => ['index']];
+$this->title = Yii::t('user', 'TITLE_UPDATE');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'TITLE_PROFILE'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-profile-update">
@@ -22,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
         <div class="uk-form-row">
-            <?= Html::submitButton(Module::t('app', 'BUTTON_SAVE'), ['class' => 'uk-button uk-button-primary']) ?>
+            <?= Html::submitButton(Yii::t('user', 'BUTTON_SAVE'), ['class' => 'uk-button uk-button-primary']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>

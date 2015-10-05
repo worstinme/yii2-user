@@ -7,7 +7,6 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-use worstinme\user\Module;
 
 /**
  * This is the model class for table "{{%user}}".
@@ -29,10 +28,6 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 1;
     const STATUS_WAIT = 2;
 
-    const ROLE_USER = 1;
-    const ROLE_MODER = 5;
-    const ROLE_ADMIN = 10;
-
     const SCENARIO_PROFILE = 'profile';
 
     /**
@@ -51,12 +46,12 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['username', 'required'],
             ['username', 'match', 'pattern' => '#^[\w_-]+$#i'],
-            ['username', 'unique', 'targetClass' => self::className(), 'message' => Module::t('app', 'ERROR_USERNAME_EXISTS')],
+            ['username', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('user', 'ERROR_USERNAME_EXISTS')],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'required'],
             ['email', 'email'],
-            ['email', 'unique', 'targetClass' => self::className(), 'message' => Module::t('app', 'ERROR_EMAIL_EXISTS')],
+            ['email', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('user', 'ERROR_EMAIL_EXISTS')],
             ['email', 'string', 'max' => 255],
 
             ['status', 'integer'],
@@ -80,11 +75,11 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             'id' => 'ID',
-            'created_at' => Module::t('app', 'USER_CREATED'),
-            'updated_at' => Module::t('app', 'USER_UPDATED'),
-            'username' => Module::t('app', 'USER_USERNAME'),
-            'email' => Module::t('app', 'USER_EMAIL'),
-            'status' => Module::t('app', 'USER_STATUS'),
+            'created_at' => Yii::t('user', 'USER_CREATED'),
+            'updated_at' => Yii::t('user', 'USER_UPDATED'),
+            'username' => Yii::t('user', 'USER_USERNAME'),
+            'email' => Yii::t('user', 'USER_EMAIL'),
+            'status' => Yii::t('user', 'USER_STATUS'),
         ];
     }
 
@@ -104,12 +99,17 @@ class User extends ActiveRecord implements IdentityInterface
         return isset($statuses[$this->status]) ? $statuses[$this->status] : '';
     }
 
+    public function getUserName()
+    {
+       return $this->username;
+    }
+
     public static function getStatusesArray()
     {
         return [
-            self::STATUS_BLOCKED => Module::t('app', 'USER_STATUS_BLOCKED'),
-            self::STATUS_ACTIVE => Module::t('app', 'USER_STATUS_ACTIVE'),
-            self::STATUS_WAIT => Module::t('app', 'USER_STATUS_WAIT'),
+            self::STATUS_BLOCKED => Yii::t('user', 'USER_STATUS_BLOCKED'),
+            self::STATUS_ACTIVE => Yii::t('user', 'USER_STATUS_ACTIVE'),
+            self::STATUS_WAIT => Yii::t('user', 'USER_STATUS_WAIT'),
         ];
     }
 

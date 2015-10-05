@@ -4,7 +4,6 @@ namespace worstinme\user\models;
 
 use yii\base\Model;
 use Yii;
-use worstinme\user\Module;
 
 /**
  * Signup form
@@ -25,13 +24,13 @@ class SignupForm extends Model
             ['username', 'filter', 'filter' => 'trim'],
             ['username', 'required'],
             ['username', 'match', 'pattern' => '#^[\w_-]+$#i'],
-            ['username', 'unique', 'targetClass' => User::className(), 'message' => Module::t('app', 'ERROR_USERNAME_EXISTS')],
+            ['username', 'unique', 'targetClass' => User::className(), 'message' => Yii::t('user', 'ERROR_USERNAME_EXISTS')],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'filter', 'filter' => 'trim'],
             ['email', 'required'],
             ['email', 'email'],
-            ['email', 'unique', 'targetClass' => User::className(), 'message' => Module::t('app', 'ERROR_EMAIL_EXISTS')],
+            ['email', 'unique', 'targetClass' => User::className(), 'message' => Yii::t('user', 'ERROR_EMAIL_EXISTS')],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
@@ -46,10 +45,10 @@ class SignupForm extends Model
     public function attributeLabels()
     {
         return [
-            'username' => Module::t('app', 'USER_USERNAME'),
-            'email' => Module::t('app', 'USER_EMAIL'),
-            'password' => Module::t('app', 'USER_PASSWORD'),
-            'verifyCode' => Module::t('app', 'USER_VERIFY_CODE'),
+            'username' => Yii::t('user', 'USER_USERNAME'),
+            'email' => Yii::t('user', 'USER_EMAIL'),
+            'password' => Yii::t('user', 'USER_PASSWORD'),
+            'verifyCode' => Yii::t('user', 'USER_VERIFY_CODE'),
         ];
     }
 

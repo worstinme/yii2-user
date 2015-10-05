@@ -4,7 +4,6 @@ namespace worstinme\user\models;
 
 use yii\base\Model;
 use Yii;
-use worstinme\user\Module;
 
 /**
  * Password reset request form
@@ -35,7 +34,7 @@ class PasswordResetRequestForm extends Model
     public function attributeLabels()
     {
         return [
-            'email' => Module::t('app', 'USER_EMAIL'),
+            'email' => Yii::t('user', 'USER_EMAIL'),
         ];
     }
 

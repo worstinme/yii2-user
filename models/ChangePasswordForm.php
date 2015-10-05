@@ -5,7 +5,6 @@ namespace worstinme\user\models;
 use yii\base\InvalidParamException;
 use yii\base\Model;
 use Yii;
-use worstinme\user\Module;
 
 /**
  * Password reset form
@@ -54,9 +53,9 @@ class ChangePasswordForm extends Model
     public function attributeLabels()
     {
         return [
-            'newPassword' => Module::t('app', 'USER_NEW_PASSWORD'),
-            'newPasswordRepeat' => Module::t('app', 'USER_REPEAT_PASSWORD'),
-            'currentPassword' => Module::t('app', 'USER_CURRENT_PASSWORD'),
+            'newPassword' => Yii::t('user', 'USER_NEW_PASSWORD'),
+            'newPasswordRepeat' => Yii::t('user', 'USER_REPEAT_PASSWORD'),
+            'currentPassword' => Yii::t('user', 'USER_CURRENT_PASSWORD'),
         ];
     }
 
@@ -68,7 +67,7 @@ class ChangePasswordForm extends Model
     {
         if (!$this->hasErrors()) {
             if (!$this->_user->validatePassword($this->$attribute)) {
-                $this->addError($attribute, Module::t('app', 'ERROR_WRONG_CURRENT_PASSWORD'));
+                $this->addError($attribute, Yii::t('user', 'ERROR_WRONG_CURRENT_PASSWORD'));
             }
         }
     }

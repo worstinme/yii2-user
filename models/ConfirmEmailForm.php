@@ -5,7 +5,6 @@ namespace worstinme\user\models;
 use yii\base\InvalidParamException;
 use yii\base\Model;
 use Yii;
-use worstinme\user\Module;
 
 /**
  * Password reset form
