@@ -11,6 +11,8 @@ use worstinme\user\models\LoginForm;
 use worstinme\user\models\PasswordResetRequestForm;
 use worstinme\user\models\ResetPasswordForm;
 use worstinme\user\models\SignupForm;
+use worstinme\user\models\UserService;
+use worstinme\user\models\User;
 
 use yii\base\InvalidParamException;
 use yii\filters\AccessControl;
@@ -45,6 +47,10 @@ class DefaultController extends Controller
                 'actions' => [
                     'logout' => ['post'],
                 ],
+            ],
+            'auth' => [
+                'class' => 'yii\authclient\AuthAction',
+                'successCallback' => [$this, 'onAuthSuccess'],
             ],
         ];
     }
@@ -161,5 +167,66 @@ class DefaultController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+
+    // auth clients
+
+    public function onAuthSuccess($client)
+    {
+        $attributes = $client->getUserAttributes();
+
+        /* @var $auth Auth */
+        $auth = UserService::find()->where([
+            'source' => $client->getId(),
+            'source_id' => $attributes['id'],
+        ])->one();
+
+        if (Yii::$app->user->isGuest) {
+            if ($auth) { // login
+                $user = $auth->user;
+                Yii::$app->user->login($user);
+            } else { // signup
+                if (isset($attributes['email']) && User::find()->where(['email' => $attributes['email']])->exists()) {
+                    Yii::$app->getSession()->setFlash('error', [
+                        Yii::t('app', "User with the same email as in {client} account already exists but isn't linked to it. Login using email first to link it.", ['client' => $client->getTitle()]),
+                    ]);
+                } else {
+                    $password = Yii::$app->security->generateRandomString(6);
+                    $user = new User([
+                        'username' => $attributes['login'],
+                        'email' => $attributes['email'],
+                        'password' => $password,
+                    ]);
+                    $user->generateAuthKey();
+                    $user->generatePasswordResetToken();
+                    $transaction = $user->getDb()->beginTransaction();
+                    if ($user->save()) {
+                        $auth = new UserService([
+                            'user_id' => $user->id,
+                            'source' => $client->getId(),
+                            'source_id' => (string)$attributes['id'],
+                        ]);
+                        if ($auth->save()) {
+                            $transaction->commit();
+                            Yii::$app->user->login($user);
+                        } else {
+                            print_r($auth->getErrors());
+                        }
+                    } else {
+                        print_r($user->getErrors());
+                    }
+                }
+            }
+        } else { // user already logged in
+            if (!$auth) { // add auth provider
+                $auth = new UserService([
+                    'user_id' => Yii::$app->user->id,
+                    'source' => $client->getId(),
+                    'source_id' => $attributes['id'],
+                ]);
+                $auth->save();
+            }
+        }
     }
 }

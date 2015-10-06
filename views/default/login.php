@@ -28,4 +28,9 @@ $this->title = 'Login';
 
     <?php ActiveForm::end(); ?>
 
+    <?= yii\authclient\widgets\AuthChoice::widget([
+         'baseAuthUrl' => ['/user/default/auth'],
+         'popupMode' => false,
+    ]) ?>
+
 </div>
