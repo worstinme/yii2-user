@@ -1,13 +1,11 @@
 # yii2-user
 
-User AUTH / RBAC / AUTHCLIENT Mdoule stiled width UiKit Css Framework.
+User Auth / RBAC / AuthClient module stiled with Uikit Framework.
 
 See also [yii2-user-admin](https://github.com/worstinme/yii2-user-admin).
 
 [![Latest Stable Version](https://poser.pugx.org/worstinme/yii2-user/v/stable.png)](https://packagist.org/packages/worstinme/yii2-user)
 [![Total Downloads](https://poser.pugx.org/worstinme/yii2-user/downloads.png)](https://packagist.org/packages/worstinme/yii2-user)
-[![Build Status](https://travis-ci.org/worstinme/yii2-user.svg?branch=master)](https://travis-ci.org/worstinme/yii2-user)
-
 
 Installation
 ------------
