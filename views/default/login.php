@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use worstinme\uikit\ActiveForm;
+use worstinme\user\AuthChoice;
 
 $this->title = 'Login'; 
 ?>
@@ -21,6 +22,14 @@ $this->title = 'Login';
             <?= $form->field($model, 'rememberMe',['options'=> ['class'=>'uk-float-left uk-text-small']])->checkbox() ?> 
             <?= Html::a(Yii::t('user','LINK_RESET_PASSWORD'), ['/user/default/request-password-reset'],['class'=>'uk-text-small uk-float-right']) ?>
         </div>
+
+        <?php $authAuthChoice = AuthChoice::begin([ 'baseAuthUrl' => ['/user/default/auth']]); ?>
+        <div class="services uk-margin-top">
+        <?php foreach ($authAuthChoice->getClients() as $client): ?>
+            <?php $authAuthChoice->clientLink($client) ?>
+        <?php endforeach; ?>
+        </div>
+        <?php AuthChoice::end(); ?>
                     
         <div class="uk-form-row uk-text-center">
             <?= Html::a(Yii::t('user','NAV_SIGNUP'), ['/user/default/signup'],['class'=>'uk-button uk-button-primary uk-button-mini uk-width-1-1']) ?>
@@ -28,9 +37,6 @@ $this->title = 'Login';
 
     <?php ActiveForm::end(); ?>
 
-    <?= yii\authclient\widgets\AuthChoice::widget([
-         'baseAuthUrl' => ['/user/default/auth'],
-         'popupMode' => false,
-    ]) ?>
+    
 
 </div>

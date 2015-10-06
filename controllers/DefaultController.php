@@ -36,7 +36,7 @@ class DefaultController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['signup','login','captcha'],
+                        'actions' => ['signup','login','captcha','auth'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -48,10 +48,6 @@ class DefaultController extends Controller
                     'logout' => ['post'],
                 ],
             ],
-            'auth' => [
-                'class' => 'yii\authclient\AuthAction',
-                'successCallback' => [$this, 'onAuthSuccess'],
-            ],
         ];
     }
 
@@ -61,6 +57,10 @@ class DefaultController extends Controller
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
+            'auth' => [
+                'class' => 'yii\authclient\AuthAction',
+                'successCallback' => [$this, 'onAuthSuccess'],
             ],
         ];
     }

@@ -1,5 +1,7 @@
 # yii2-user
 
+`In developing. Use at your own risk`
+
 User Auth / RBAC / AuthClient module stiled with Uikit Framework.
 
 See also [yii2-user-admin](https://github.com/worstinme/yii2-user-admin).
