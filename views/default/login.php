@@ -12,7 +12,7 @@ $this->title = 'Login';
                     
         <?= $form->field($model, 'username')->label(false)->textInput(['placeholder' => Yii::t('user','CONTACT_NAME_EMAIL')])  ?>
 
-        <?= $form->field($model, 'password')->passwordInput(['placeholder'=>Yii::t('app','USER_PASSWORD')])->label(false) ?>
+        <?= $form->field($model, 'password')->passwordInput(['placeholder'=>Yii::t('user','USER_PASSWORD')])->label(false) ?>
                     
         <div class="uk-form-row">
             <?= Html::submitButton(Yii::t('user','USER_BUTTON_SIGNUP'), ['class' => 'uk-button uk-button-success uk-button-large uk-width-1-1', 'name' => 'login-button']) ?>
