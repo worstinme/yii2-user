@@ -25,7 +25,8 @@ $dataProvider = new ArrayDataProvider([
           'attributes' => ['name', 'description'],
       ],
       'pagination' => [
-          'pageSize' => 10,
+          'pageSize' => 10, 
+          
       ],
  ]);
 ?>
