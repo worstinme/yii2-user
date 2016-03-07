@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = Yii::t('user', 'Редактирование');
                 <?php
                 echo implode('<br>', $error);
                 ?>
-            </div>
+            </div> 
         <?php
         }
         ?>
