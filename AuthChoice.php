@@ -67,7 +67,7 @@ class AuthChoice extends \yii\authclient\widgets\AuthChoice
     public function clientLink($client, $text = null, array $htmlOptions = [])
     {
         if ($text === null) {
-            $text = Html::tag('span', '', ['class' => 'auth-icon ' . $client->getName()]);
+            $text = Html::tag('span', '<i class="uk-icon-'.$client->getName().'"></i>', ['class' => 'uk-button']);
             //$text .= Html::tag('span', $client->getTitle(), ['class' => 'auth-title']);
         }
         if (!array_key_exists('class', $htmlOptions)) {

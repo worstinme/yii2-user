@@ -21,7 +21,7 @@ class PasswordResetRequestForm extends Model
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'exist',
-                'targetClass' => 'app\modules\user\models\User',
+                'targetClass' => 'worstinme\user\models\User',
                 'filter' => ['status' => User::STATUS_ACTIVE],
                 'message' => 'There is no user with such email.'
             ],
@@ -55,8 +55,8 @@ class PasswordResetRequestForm extends Model
                 $user->generatePasswordResetToken();
             }
             if ($user->save()) {
-                return \Yii::$app->mailer->compose('passwordResetToken', ['user' => $user])
-                    ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . ' robot'])
+                return \Yii::$app->mailer->compose('@worstinme/user/mail/passwordResetToken', ['user' => $user])
+                    ->setFrom([\Yii::$app->params['adminEmail'] => 'robot'])
                     ->setTo($this->email)
                     ->setSubject('Password reset for ' . \Yii::$app->name)
                     ->send();

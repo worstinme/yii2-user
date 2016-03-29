@@ -4,31 +4,14 @@ namespace worstinme\user\models;
 
 use Yii;
 use yii\base\NotSupportedException;
-use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
-/**
- * This is the model class for table "{{%user}}".
- *
- * @property integer $id
- * @property integer $created_at
- * @property integer $updated_at
- * @property string $username
- * @property string $auth_key
- * @property string $email_confirm_token
- * @property string $password_hash
- * @property string $password_reset_token
- * @property string $email
- * @property integer $status
- */
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_BLOCKED = 0;
     const STATUS_ACTIVE = 1;
     const STATUS_WAIT = 2;
-
-    const SCENARIO_PROFILE = 'profile';
 
     /**
      * @inheritdoc
@@ -64,7 +47,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             self::SCENARIO_DEFAULT => ['username', 'email', 'status'],
-            self::SCENARIO_PROFILE => ['email'],
         ];
     }
 
@@ -89,7 +71,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            \yii\behaviors\TimestampBehavior::className(),
         ];
     }
 
@@ -229,6 +211,7 @@ class User extends ActiveRecord implements IdentityInterface
         if (!static::isPasswordResetTokenValid($token)) {
             return null;
         }
+
         return static::findOne([
             'password_reset_token' => $token,
             'status' => self::STATUS_ACTIVE,
@@ -246,9 +229,11 @@ class User extends ActiveRecord implements IdentityInterface
         if (empty($token)) {
             return false;
         }
+
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         $parts = explode('_', $token);
         $timestamp = (int) end($parts);
+
         return $timestamp + $expire >= time();
     }
 

@@ -31,16 +31,17 @@ class ProfileController extends Controller
     }
 
     public function actionIndex()
-    {
+    {   
+
         return $this->render('index', [
-            'model' => $this->findModel(),
+            'model' => $this->findProfile(),
         ]);
     }
 
     public function actionUpdate()
     {
-        $model = $this->findModel();
-        $model->scenario = User::SCENARIO_PROFILE;
+
+        $model = $this->findProfile();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
@@ -53,6 +54,8 @@ class ProfileController extends Controller
 
     public function actionChangePassword()
     {
+        $this->layout = 'clean';
+
         $user = $this->findModel();
         $model = new ChangePasswordForm($user);
 
@@ -71,5 +74,13 @@ class ProfileController extends Controller
     private function findModel()
     {
         return User::findOne(Yii::$app->user->identity->getId());
+    }
+
+    /**
+     * @return User Profile the loaded model
+     */
+    private function findProfile()
+    {
+        return $this->module->profileModel::findOne(Yii::$app->user->identity->getId());
     }
 }

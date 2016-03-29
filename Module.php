@@ -13,6 +13,7 @@ use yii\base\InvalidConfigException;
 class Module extends \yii\base\Module
 {
 	public $controllerNamespace = 'worstinme\user\controllers';
+	public $profileModel = '\worstinme\user\models\Profile';
 
 	public function init()
     {

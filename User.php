@@ -11,4 +11,5 @@ class User extends \yii\web\User
     const STATUS_ACTIVE = 1;
     const STATUS_WAIT = 2;
     
+    
 }

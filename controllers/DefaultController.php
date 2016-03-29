@@ -100,6 +100,7 @@ class DefaultController extends Controller
 
     public function actionSignup()
     {
+        $this->layout = 'clean';
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
