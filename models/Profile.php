@@ -9,7 +9,6 @@ use Yii;
 
 class Profile extends ActiveRecord
 {
-    public $params;
     public $jsonParams = [];
     
     /**
@@ -67,23 +66,21 @@ class Profile extends ActiveRecord
     { 
         if (in_array($name, $this->jsonParams)) {
             return $this->getJsonParams($name);
-        } else {
-            return parent::__get($name);
-        }
+        } 
+        return parent::__get($name);
     }
 
     public function __set($name, $value)
     { 
         if (in_array($name, $this->jsonParams)) {
             return $this->setJsonParams($name, $value);
-        } else {
-            return parent::__set($name, $value);
-        }
+        } 
+        return parent::__set($name, $value);
     } 
 
     public function getJsonParams($name) {
         $params = !empty($this->params) ? Json::decode($this->params) : [];
-        return isset($params['metaKeywords']) ? $params['metaKeywords'] : '';
+        return isset($params[$name]) ? $params[$name] : null;
     }
 
     public function setJsonParams($name,$value) {
