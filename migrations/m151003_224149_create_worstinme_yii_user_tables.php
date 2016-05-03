@@ -25,12 +25,12 @@ class m151003_224149_create_worstinme_yii_user_tables extends Migration
             'email' => $this->string()->notNull(),
             'params' => $this->text(),
             'status' => $this->smallInteger()->notNull()->defaultValue(0),
-            'role' => $this->smallInteger()->notNull()->defaultValue(1),
         ], $tableOptions);
  
         $this->createIndex('idx_user_username', '{{%user}}', 'username');
         $this->createIndex('idx_user_email', '{{%user}}', 'email');
         $this->createIndex('idx_user_status', '{{%user}}', 'status');
+
     }
 
     public function down()
