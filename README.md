@@ -2,9 +2,7 @@
 
 `In developing. Use at your own risk`
 
-User Auth / RBAC / AuthClient module stiled with Uikit Framework.
-
-See also [yii2-user-admin](https://github.com/worstinme/yii2-user-admin).
+User Auth / DB-RBAC / AuthClient module stiled with Uikit Framework.
 
 [![Latest Stable Version](https://poser.pugx.org/worstinme/yii2-user/v/stable.png)](https://packagist.org/packages/worstinme/yii2-user)
 [![Total Downloads](https://poser.pugx.org/worstinme/yii2-user/downloads.png)](https://packagist.org/packages/worstinme/yii2-user)
@@ -23,11 +21,10 @@ php composer.phar require --prefer-dist worstinme/yii2-user
 or add
 
 ```
-"worstinme/yii2-user": "~2.0.0"
+"worstinme/yii2-user": "^1.0.0"
 ```
 
 to the require section of your `composer.json` file.
-
 
 Required configurations
 -----------------------
@@ -37,6 +34,9 @@ Required configurations
     'user' => [
         'class' => 'worstinme\user\Module',
     ],
+    'useradmin' => [
+        'class' => 'worstinme\user\backend\Module',
+    ],
     ....
  ],
 'components' => [
@@ -44,7 +44,7 @@ Required configurations
         'class'=>'worstinme\user\User',
         'identityClass' => 'worstinme\user\models\User',
         'enableAutoLogin' => true,
-        'loginUrl'=>array('/user/default/login'),
+        'loginUrl'=>['/user/default/login'],
     ],
     'authClientCollection' => [
         'class' => 'yii\authclient\Collection',
@@ -63,26 +63,24 @@ Required configurations
     //	...
 ]
 ```
-
-& migrations
-
-```
-$ yii migrate --migrationPath=@worstinme/user/migrations/
-```
-
 RBAC configurations
 -------------------
+to web.php & console.php components section
 
 ```php
-'components' => [
     'authManager' => [
             'class' => 'yii\rbac\DbManager',
     ],
-    //	...
 ]
 ```
 & migrations
 
 ```
 $ yii migrate --migrationPath=@yii/rbac/migrations/
+```
+
+Then, use migrations to create user tables & default user administrator:administrator with admin role(don't forget to change it's default password).
+
+```
+$ yii migrate --migrationPath=@worstinme/user/migrations/
 ```
