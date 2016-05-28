@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use worstinme\uikit\Breadcrumbs;
 use worstinme\uikit\Alert;
-use app\assets\AppAsset;
+use worstinme\assets\AppAsset;
 
 AppAsset::register($this);  
 
