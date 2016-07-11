@@ -6,31 +6,27 @@
  */
 namespace worstinme\user\controllers;
 
-use worstinme\user\models\ConfirmEmailForm;
-use worstinme\user\models\LoginForm;
+use Yii;
 use worstinme\user\models\PasswordResetRequestForm;
 use worstinme\user\models\ResetPasswordForm;
-use worstinme\user\models\SignupForm;
+use worstinme\user\models\ConfirmEmailForm;
 use worstinme\user\models\UserService;
+use worstinme\user\models\UpdateForm;
+use worstinme\user\models\SignupForm;
+use worstinme\user\models\LoginForm;
 use worstinme\user\models\User;
 
 use yii\base\InvalidParamException;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
-use yii\web\Controller;
-use Yii;
 
-class DefaultController extends Controller
+class DefaultController extends \yii\web\Controller
 {
-    
-
     public function behaviors()
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['logout','signup','update'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -38,16 +34,17 @@ class DefaultController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout','update','request-email-confirm'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => \yii\filters\VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post'],
+                    'request-email-confirm'=>['post'],
                 ],
             ],
         ];
@@ -67,14 +64,25 @@ class DefaultController extends Controller
         ];
     }
 
-    public function actionIndex()
+    public function actionUpdate()
     {
-        return $this->redirect(['profile/index'], 301);
+
+        $model = UpdateForm::findOne(Yii::$app->user->identity->id);
+
+        $confirm_email = $model->status == User::STATUS_WAIT || $model->status == User::STATUS_SOCIAL ? true : false;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', Yii::t('user','SUCCESS_UPDATE_FORM'));
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+            'confirm_email'=>$confirm_email,
+        ]);
     }
 
     public function actionLogin()
     {   
-        $this->layout = 'clean';
 
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -100,11 +108,11 @@ class DefaultController extends Controller
 
     public function actionSignup()
     {
-        $this->layout = 'clean';
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
-                Yii::$app->getSession()->setFlash('success', 'Подтвердите ваш электронный адрес.');
+                $model->login();
+                Yii::$app->session->setFlash('success', 'Подтвердите ваш электронный адрес.');
                 return $this->goHome();
             }
         }
@@ -123,9 +131,9 @@ class DefaultController extends Controller
         }
 
         if ($model->confirmEmail()) {
-            Yii::$app->getSession()->setFlash('success', 'Спасибо! Ваш Email успешно подтверждён.');
+            Yii::$app->session->setFlash('success', 'Спасибо! Ваш Email успешно подтверждён.');
         } else {
-            Yii::$app->getSession()->setFlash('error', 'Ошибка подтверждения Email.');
+            Yii::$app->session->setFlash('error', 'Ошибка подтверждения Email.');
         }
 
         return $this->goHome();
@@ -133,16 +141,14 @@ class DefaultController extends Controller
 
     public function actionRequestPasswordReset()
     {
-        $this->layout = 'clean';
 
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                Yii::$app->getSession()->setFlash('success', 'Спасибо! На ваш Email было отправлено письмо со ссылкой на восстановление пароля.');
-
+                Yii::$app->session->setFlash('success', Yii::t('user','REQUEST_PASWORD_RESET_SUCCESS'));
                 return $this->goHome();
             } else {
-                Yii::$app->getSession()->setFlash('error', 'Извините. У нас возникли проблемы с отправкой.');
+                Yii::$app->session->setFlash('error', Yii::t('user','REQUEST_PASWORD_RESET_ERROR'));
             }
         }
 
@@ -151,10 +157,32 @@ class DefaultController extends Controller
         ]);
     }
 
+    public function actionRequestEmailConfirm()
+    {
+        $user = Yii::$app->user->identity;
+
+        $user->generateEmailConfirmToken();
+
+        if ($user->save()) {
+
+            Yii::$app->session->setFlash('success', Yii::t('user','REQUEST_EMAIL_CONFIRM_SUCCESS'));
+
+            Yii::$app->mailer->compose('@worstinme/user/mail/confirmEmail', ['user' => $user])
+                ->setFrom([Yii::$app->params['adminEmail'] => Yii::$app->name])
+                ->setTo($user->email)
+                ->setSubject('Подтверждение регистрации ' . Yii::$app->name)
+                ->send();# code...
+        }
+        else {
+            Yii::$app->session->setFlash('error', Yii::t('user','REQUEST_EMAIL_CONFIRM_ERROR'));
+        }
+
+        return $this->redirect(['update']);
+    }
+
     public function actionResetPassword($token)
     {
-        $this->layout = 'clean';
-        
+
         try {
             $model = new ResetPasswordForm($token);
         } catch (InvalidParamException $e) {
@@ -162,7 +190,7 @@ class DefaultController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->getSession()->setFlash('success', 'Спасибо! Пароль успешно изменён.');
+            Yii::$app->session->setFlash('success', 'Спасибо! Пароль успешно изменён.');
 
             return $this->goHome();
         }
@@ -179,6 +207,18 @@ class DefaultController extends Controller
     {
         $attributes = $client->getUserAttributes();
 
+        $service  = $client->getId();
+
+        if (empty($attributes['email']) && $service == 'vkontakte') {
+            $attributes['email'] = $attributes['id'].'@vk.com';
+        }
+        elseif (empty($attributes['email']) && $service == 'twitter') {
+            $attributes['email'] = $attributes['id'].'@twitter.com';
+        }
+        elseif (empty($attributes['email'])) {
+            $attributes['email'] = $attributes['id']."@$service.com";
+        }
+
         /* @var $auth Auth */
         $auth = UserService::find()->where([
             'source' => $client->getId(),
@@ -186,45 +226,63 @@ class DefaultController extends Controller
         ])->one();
 
         if (Yii::$app->user->isGuest) {
-            if ($auth) { // login
+
+            if ($auth) { 
+
+                // login
                 $user = $auth->user;
                 Yii::$app->user->login($user);
-            } else { // signup
-                if (isset($attributes['email']) && User::find()->where(['email' => $attributes['email']])->exists()) {
-                    Yii::$app->getSession()->setFlash('error', [
-                        Yii::t('app', "User with the same email as in {client} account already exists but isn't linked to it. Login using email first to link it.", ['client' => $client->getTitle()]),
-                    ]);
+
+            } else { 
+
+                // signup
+                if (User::find()->where(['email' => $attributes['email']])->exists()) {
+
+                    Yii::$app->session->setFlash('error', Yii::t('user', "SERVICE_USER_EMAIL_EXISTS"));
+
                 } else {
-                    $password = Yii::$app->security->generateRandomString(6);
+
                     $user = new User([
-                        'username' => $attributes['login'],
+                        'username' => $attributes['email'],
                         'email' => $attributes['email'],
-                        'password' => $password,
+                        'status' => User::STATUS_SOCIAL
                     ]);
+
+                    $user->setPassword(Yii::$app->security->generateRandomString(6));
                     $user->generateAuthKey();
                     $user->generatePasswordResetToken();
+
                     $transaction = $user->getDb()->beginTransaction();
+
                     if ($user->save()) {
+
                         $auth = new UserService([
                             'user_id' => $user->id,
                             'source' => $client->getId(),
                             'source_id' => (string)$attributes['id'],
                         ]);
+
                         if ($auth->save()) {
                             $transaction->commit();
                             Yii::$app->user->login($user);
-                        } else {
-                            print_r($auth->getErrors());
                         }
-                    } else {
-                        print_r($user->getErrors());
+                        else {
+                            Yii::$app->session->setFlash('error', Yii::t('user', "SERVICE_REG_FAIL").' '.\yii\helpers\Json::encode($auth->getErrors()));
+                        }
+                    }
+                    else {
+                        Yii::$app->session->setFlash('error', Yii::t('user', "SERVICE_REG_FAIL").' '.\yii\helpers\Json::encode($user->getErrors()));
                     }
                 }
             }
-        } else { // user already logged in
-            if (!$auth) { // add auth provider
+
+        } else { 
+
+            // user already logged in
+            if (!$auth) { 
+                // add auth provider
                 $auth = new UserService([
-                    'user_id' => Yii::$app->user->id,
+                    'user_id' => Yii::$app->user->identity->id,
                     'source' => $client->getId(),
                     'source_id' => $attributes['id'],
                 ]);

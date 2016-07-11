@@ -17,16 +17,13 @@ $this->beginPage() ?>
 <title><?= Html::encode($this->title) ?></title>
 <?php $this->head() ?>
 </head>
-<body class="uk-height-1-1">
+<body class="uk-container uk-container-center uk-flex uk-flex-middle  uk-flex-center" style="min-height:100vh">
 <?php $this->beginBody() ?>
-<div class="uk-vertical-align uk-text-center uk-height-1-1">
-    <div class="uk-vertical-align-middle" style="min-width:300px">
-        <div class="uk-panel uk-panel-box uk-margin-top">
-			<?= Alert::widget() ?>
-			<?php echo $content; ?>
-		</div>
-    </div>  
-</div>
+    <div class="uk-panel" style="min-width:300px">
+    	<h1><?= Html::encode($this->title) ?></h1>
+        <?= Alert::widget() ?>
+		<?php echo $content; ?>
+    </div>
 <?php $this->endBody() ?>
 </body>
 </html>

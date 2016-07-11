@@ -54,9 +54,9 @@ class LoginForm extends Model
                 $this->addError('password', Yii::t('user', 'ERROR_WRONG_USERNAME_OR_PASSWORD'));
             } elseif ($user && $user->status == User::STATUS_BLOCKED) {
                 $this->addError('username', Yii::t('user', 'ERROR_PROFILE_BLOCKED'));
-            } elseif ($user && $user->status == User::STATUS_WAIT) {
+            } /*elseif ($user && $user->status == User::STATUS_WAIT) {
                 $this->addError('username', Yii::t('user', 'ERROR_PROFILE_NOT_CONFIRMED'));
-            }
+            }*/
         }
     }
 

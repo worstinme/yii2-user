@@ -22,7 +22,7 @@ class PasswordResetRequestForm extends Model
             ['email', 'email'],
             ['email', 'exist',
                 'targetClass' => 'worstinme\user\models\User',
-                'filter' => ['status' => User::STATUS_ACTIVE],
+                //'filter' => ['status' => User::STATUS_ACTIVE],
                 'message' => 'There is no user with such email.'
             ],
         ];
@@ -47,21 +47,27 @@ class PasswordResetRequestForm extends Model
     {
         /* @var $user User */
         $user = User::findOne([
-            'status' => User::STATUS_ACTIVE,
             'email' => $this->email,
         ]);
-        if ($user) {
+
+        if ($user && $user->status == User::STATUS_BLOCKED) {
+            Yii::$app->session->setFlash('error', Yii::t('user','ERROR_PROFILE_BLOCKED'));
+        }
+        elseif ($user) {
+
             if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
                 $user->generatePasswordResetToken();
             }
+
             if ($user->save()) {
                 return \Yii::$app->mailer->compose('@worstinme/user/mail/passwordResetToken', ['user' => $user])
-                    ->setFrom([\Yii::$app->params['adminEmail'] => 'robot'])
+                    ->setFrom([Yii::$app->params['adminEmail'] => 'robot'])
                     ->setTo($this->email)
-                    ->setSubject('Password reset for ' . \Yii::$app->name)
+                    ->setSubject(Yii::t('user','EMAIL_TITLE_PASSWORD_RESET',['sitename'=>\Yii::$app->name]))
                     ->send();
             }
         }
+
         return false;
     }
 }

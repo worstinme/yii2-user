@@ -24,5 +24,6 @@ class AppAsset extends AssetBundle
     public $depends = [
         'yii\web\YiiAsset',
         'worstinme\uikit\UikitAsset',
+        'worstinme\uikit\assets\Password',
     ];
 }

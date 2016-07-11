@@ -14,6 +14,7 @@ class SignupForm extends Model
     public $email;
     public $password;
     public $verifyCode;
+    public $_user;
 
     /**
      * @inheritdoc
@@ -60,11 +61,12 @@ class SignupForm extends Model
     public function signup()
     {
         if ($this->validate()) {
+
             $user = new User();
             $user->username = $this->username;
             $user->email = $this->email;
             $user->setPassword($this->password);
-            $user->status = User::STATUS_WAIT;
+            $user->status = User::STATUS_ACTIVE;
             $user->generateAuthKey();
             $user->generateEmailConfirmToken();
 
@@ -81,4 +83,12 @@ class SignupForm extends Model
 
         return null;
     }
+
+    public function login()
+    {
+        if (($user = User::findByUsername($this->username)) !== null) {
+            return Yii::$app->user->login($user, 0);
+        }
+    }
+
 }

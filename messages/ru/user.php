@@ -10,10 +10,9 @@ return [
     'BUTTON_SAVE' => 'Сохранить',
     'BUTTON_UPDATE' => 'Редактировать',
     'BUTTON_DELETE' => 'Удалить',
-    'TITLE_UPDATE' => 'Редактирование',
+    'TITLE_UPDATE' => 'Настройки пользователя',
     'TITLE_SIGNUP' => 'Регистрация',
-    'TITLE_LOGIN' => 'Вход',
-    'TITLE_PROFILE' => 'Профиль',
+    'TITLE_LOGIN' => 'Авторизация',
     'TITLE_CONTACT' => 'Обратная связь',
     'TITLE_CHANGE_PASSWORD' => 'Смена пароля',
     'TITLE_RESET_PASSWORD' => 'Восстановление пароля',
@@ -28,6 +27,7 @@ return [
     'CONTACT_THANKS' => 'Спасибо! Мы свяжемся с Вами в скором  времени.',
     'USER_USERNAME' => 'Имя пользователя',
     'USER_PASSWORD' => 'Пароль',
+    'USER_PASSWORD_REPEAT'=>'Повторите пароль',
     'USER_NEW_PASSWORD' => 'Новый пароль',
     'USER_REPEAT_PASSWORD' => 'Повторите пароль',
     'USER_CURRENT_PASSWORD' => 'Текущий пароль',
@@ -40,8 +40,10 @@ return [
     'USER_STATUS_ACTIVE' => 'Активен',
     'USER_STATUS_WAIT' => 'Ожидает подтверждения',
     'USER_VERIFY_CODE' => 'Код',
-    'USER_BUTTON_SIGNUP' => 'Войти',
+    'USER_BUTTON_LOGIN' => 'Войти',
+    'USER_BUTTON_SIGNUP' => 'Зарегистрироваться',
     'USER_BUTTON_REG' => 'Зарегистрироваться',
+    'USER_CAPTCHA' => 'Проверочный код',
     'PLEASE_FILL_FOR_LOGIN' => 'Для входа на сайт введите данные своей учётной записи:',
     'PLEASE_FILL_FOR_SIGNUP' => 'Для регистрации заполните следующие поля:',
     'PLEASE_FILL_FOR_RESET_REQUEST' => 'Введите свой Email и мы пришлём Вам инструкцию по восстановлению:',
@@ -55,5 +57,15 @@ return [
     'HELLO {username}' => 'Здравствуйте, {username}!',
     'FOLLOW_TO_RESET_PASSWORD' => 'Для смены пароля пройдите по ссылке:',
     'FOLLOW_TO_CONFIRM_EMAIL' => 'Для подтверждения адреса пройдите по ссылке:',
-    'IGNORE_IF_DO_NOT_REGISTER' => 'Если Вы не регистрировались на нашем сайте, то просто удалите это письмо.'
+    'IGNORE_IF_DO_NOT_REGISTER' => 'Если Вы не регистрировались на нашем сайте, то просто удалите это письмо.',
+
+    'REQUEST_PASWORD_RESET_ERROR'=>'Извините. У нас возникли проблемы с отправкой письма.',
+    'REQUEST_PASWORD_RESET_SUCCESS'=>'Спасибо! На ваш Email было отправлено письмо со ссылкой на восстановление пароля.',
+
+    'EMAIL_TITLE_PASSWORD_RESET'=>'Восстановление пароля на {sitename}',
+    'USER_EMAIL_NOT_CONFIRMED'=>'Email не подтверждён',
+    'REQUEST_EMAIL_CONFIRM'=>'Отправить письмо',
+
+    'LINK_SOCIAL_TO_USER'=>'Привязать профили социальных сетей:',
+    'SUCCESS_UPDATE_FORM'=>'Настройки аккаунта успешно изменены.'
 ];

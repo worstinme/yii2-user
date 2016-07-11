@@ -14,6 +14,7 @@ class Module extends \yii\base\Module
 {
 	public $controllerNamespace = 'worstinme\user\controllers';
 	public $profileModel = '\worstinme\user\models\Profile';
+	public $layout = 'clean';
 
 	public function init()
     {

@@ -12,23 +12,18 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_BLOCKED = 0;
     const STATUS_ACTIVE = 1;
     const STATUS_WAIT = 2;
+    const STATUS_SOCIAL = 3;
 
-    /**
-     * @inheritdoc
-     */
     public static function tableName()
     {
         return '{{%user}}';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
+            ['username', 'filter', 'filter' => 'trim'],
             ['username', 'required'],
-            ['username', 'match', 'pattern' => '#^[\w_-]+$#i'],
             ['username', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('user', 'ERROR_USERNAME_EXISTS')],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
@@ -38,7 +33,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['email', 'string', 'max' => 255],
 
             ['status', 'integer'],
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'default', 'value' => self::STATUS_WAIT],
             ['status', 'in', 'range' => array_keys(self::getStatusesArray())],
         ];
     }
@@ -50,9 +45,6 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
@@ -65,9 +57,6 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function behaviors()
     {
         return [
@@ -81,55 +70,36 @@ class User extends ActiveRecord implements IdentityInterface
         return isset($statuses[$this->status]) ? $statuses[$this->status] : '';
     }
 
-    public function getUserName()
-    {
-       return $this->username;
-    }
-
     public static function getStatusesArray()
     {
         return [
             self::STATUS_BLOCKED => Yii::t('user', 'USER_STATUS_BLOCKED'),
             self::STATUS_ACTIVE => Yii::t('user', 'USER_STATUS_ACTIVE'),
             self::STATUS_WAIT => Yii::t('user', 'USER_STATUS_WAIT'),
+            self::STATUS_SOCIAL => Yii::t('user', 'USER_STATUS_SOCIAL'),
         ];
     }
 
-    /**
-    * @inheritdoc
-    */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['id' => $id]);
     }
 
-    /**
-     * @inheritdoc
-     */
     public static function findIdentityByAccessToken($token, $type = null)
     {
         throw new NotSupportedException('findIdentityByAccessToken is not implemented.');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getId()
     {
         return $this->getPrimaryKey();
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getAuthKey()
     {
         return $this->auth_key;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function validateAuthKey($authKey)
     {
         return $this->getAuthKey() === $authKey;
@@ -185,7 +155,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByEmailConfirmToken($email_confirm_token)
     {
-        return static::findOne(['email_confirm_token' => $email_confirm_token, 'status' => self::STATUS_WAIT]);
+        return static::findOne(['email_confirm_token' => $email_confirm_token, 'status' => [self::STATUS_WAIT,self::STATUS_SOCIAL]]);
     }
 
     /**
@@ -218,7 +188,6 @@ class User extends ActiveRecord implements IdentityInterface
 
         return static::findOne([
             'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
         ]);
     }
 
@@ -234,7 +203,10 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
 
-        $expire = Yii::$app->params['user.passwordResetTokenExpire'];
+        $expire = !empty(Yii::$app->params['user.passwordResetTokenExpire']) ? 
+                    Yii::$app->params['user.passwordResetTokenExpire'] :
+                    60*60*24;
+                    
         $parts = explode('_', $token);
         $timestamp = (int) end($parts);
 

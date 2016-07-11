@@ -59,4 +59,9 @@ class UserService extends \yii\db\ActiveRecord
         }
         return false;
     }
+
+    public function getUser() {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+    
 }
