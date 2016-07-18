@@ -24,13 +24,13 @@ $this->title = Yii::t('user', 'TITLE_LOGIN');;
 
     <?php if (Yii::$app->has('authClientCollection')): ?>
     <div class="uk-margin-top">    
-        <?php $authAuthChoice = AuthChoice::begin([ 'baseAuthUrl' => ['/user/default/auth']]); ?>
+        <?php $authAuthChoice = \worstinme\user\AuthChoice::begin([ 'baseAuthUrl' => ['/user/default/auth']]); ?>
         <div class="services uk-display-inline-block uk-subnav">
             <?php foreach ($authAuthChoice->getClients() as $client): ?>
                 <?php $authAuthChoice->clientLink($client) ?>
             <?php endforeach; ?>
         </div>
-        <?php AuthChoice::end(); ?>
+        <?php \worstinme\user\AuthChoice::end(); ?>
     </div>  
     <?php endif ?>
        

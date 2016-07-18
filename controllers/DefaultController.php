@@ -289,5 +289,9 @@ class DefaultController extends \yii\web\Controller
                 $auth->save();
             }
         }
+
+        if (!Yii::$app->user->isGuest) {
+            $this->action->successUrl = \yii\helpers\Url::previous();
+        }
     }
 }
