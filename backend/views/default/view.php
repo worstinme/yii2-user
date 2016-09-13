@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use worstinme\uikit\ActiveForm;
 
 
-$this->title = Yii::t('user', 'Управление ролями пользователя: ').$user->getUserName();
+$this->title = Yii::t('user', 'Управление ролями пользователя: ').$user->username;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Пользователи'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<div class="uk-width-4-5 col-md-9">
 
-	<h1><?=Yii::t('user', 'Управление ролями пользователя');?> <?= $user->getUserName(); ?></h1>
+	<h1><?=Yii::t('user', 'Управление ролями пользователя');?> <?= $user->username; ?></h1>
 
 	<hr>
 	
