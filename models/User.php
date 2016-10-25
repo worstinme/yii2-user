@@ -155,7 +155,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByEmailConfirmToken($email_confirm_token)
     {
-        return static::findOne(['email_confirm_token' => $email_confirm_token, 'status' => [self::STATUS_WAIT,self::STATUS_SOCIAL]]);
+        return static::findOne(['email_confirm_token' => $email_confirm_token]);
     }
 
     /**
