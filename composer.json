@@ -17,7 +17,7 @@
 	"require": {
 		"yiisoft/yii2": "*",
 		"yiisoft/yii2-authclient": "*",
-		"worstinme/yii2-uikit": "dev-master"
+		"worstinme/yii2-uikit": "*"
 	},
 	"autoload": {
 		"psr-4": {
