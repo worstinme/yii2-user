@@ -24,8 +24,4 @@ class Module extends \yii\base\Module
 	        'basePath' => '@worstinme/user/messages',
 	    ];
 	}
-	public static function t($category, $message, $params = [], $language = null)
-	{
-	    return Yii::t('modules/'.$this->id.'/' . $category, $message, $params, $language);
-	}
 }
